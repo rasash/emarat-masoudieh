@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ورود به پنل | عمارت مسعودیه</title>
+  <link rel="icon" href="/favicon.svg" />
+  <link rel="stylesheet" href="/css/admin.css" />
+</head>
+<body class="login-body">
+  <form class="login-card" method="post" action="/admin/login">
+    <div class="mark">م</div>
+    <h1>پنل مدیریت عمارت مسعودیه</h1>
+    <p>برای ویرایش صفحات، عکس‌ها و متون وارد شوید.</p>
+    <% if (error) { %><div class="alert"><%= error %></div><% } %>
+    <label>نام کاربری</label>
+    <input name="username" required autofocus />
+    <label>رمز عبور</label>
+    <input name="password" type="password" required />
+    <button type="submit">ورود</button>
+  </form>
+</body>
+</html>

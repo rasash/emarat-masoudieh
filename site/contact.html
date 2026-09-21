@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ارتباط با ما | عمارت مسعودیه</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div id="site-header"></div>
+  <section class="page-hero">
+    <img src="images/portal.jpg" alt="ورودی عمارت مسعودیه" />
+    <div class="inner">
+      <div class="eyebrow">بازدید و تماس</div>
+      <h1>ارتباط با ما</h1>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap contact-grid">
+      <div class="panel">
+        <div class="kicker">دبیرخانه مجموعه</div>
+        <h2 style="margin: 6px 0 16px; color: var(--burgundy-dark);">راه‌های ارتباط</h2>
+        <div class="info-list">
+          <div>
+            <b>نشانی</b>
+            <span class="muted">تهران، میدان بهارستان، ضلع جنوب‌غربی، خیابان اکباتان، عمارت مسعودیه</span>
+          </div>
+          <div>
+            <b>دسترسی</b>
+            <span class="muted">نزدیک‌ترین ایستگاه‌های مترو: ملت و بهارستان. ورودی مجموعه در خیابان اکباتان است.</span>
+          </div>
+          <div>
+            <b>تلفن</b>
+            <span class="muted">۰۲۱-۳۳۹۰۰۰۰۰ (نمونه نمایشی)</span>
+          </div>
+          <div>
+            <b>ایمیل</b>
+            <span class="muted">info@masoudieh.ir</span>
+          </div>
+        </div>
+        <div class="map-box">میدان بهارستان، تهران</div>
+      </div>
+
+      <div class="panel">
+        <div class="kicker">فرم پیام</div>
+        <h2 style="margin: 6px 0 16px; color: var(--burgundy-dark);">درخواست بازدید یا همکاری</h2>
+        <form class="form" id="contactForm">
+          <div>
+            <label for="name">نام و نام خانوادگی</label>
+            <input id="name" name="name" required />
+          </div>
+          <div>
+            <label for="email">ایمیل یا تلفن</label>
+            <input id="email" name="email" required />
+          </div>
+          <div>
+            <label for="topic">موضوع</label>
+            <select id="topic" name="topic">
+              <option>بازدید گروهی</option>
+              <option>رویداد و نمایشگاه</option>
+              <option>پژوهش و دانشنامه</option>
+              <option>رسانه و اتاق خبر</option>
+              <option>سایر</option>
+            </select>
+          </div>
+          <div>
+            <label for="msg">پیام</label>
+            <textarea id="msg" name="msg" required></textarea>
+          </div>
+          <button class="btn btn-solid" type="submit">ارسال پیام</button>
+          <div class="toast" id="formToast">پیام شما ثبت شد. در نسخه نمایشی ارسال به سرور انجام نمی‌شود.</div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top: 0;">
+    <div class="wrap media-row">
+      <figure>
+        <img src="images/hero.jpg" alt="عمارت مسعودیه" />
+        <figcaption>نمای مجموعه از میدان بهارستان</figcaption>
+      </figure>
+      <figure>
+        <img src="images/courtyard.jpg" alt="حیاط برای بازدید" />
+        <figcaption>حیاط اصلی؛ نقطه آغاز تور بازدید</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <div id="site-footer"></div>
+  <script src="js/main.js"></script>
+</body>
+</html>

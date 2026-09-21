@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= title %> | پنل عمارت مسعودیه</title>
+  <link rel="icon" href="/favicon.svg" />
+  <link rel="stylesheet" href="/css/admin.css" />
+</head>
+<body>
+  <aside class="sidebar">
+    <a class="brand" href="/admin">
+      <span><%= settings.brand_letter || "م" %></span>
+      <strong>پنل مسعودیه</strong>
+    </a>
+    <nav>
+      <a href="/admin" class="<%= currentPath === '/admin' ? 'on' : '' %>">داشبورد</a>
+      <a href="/admin/pages" class="<%= currentPath.startsWith('/admin/pages') ? 'on' : '' %>">صفحات</a>
+      <a href="/admin/media" class="<%= currentPath.startsWith('/admin/media') ? 'on' : '' %>">کتابخانه رسانه</a>
+      <a href="/admin/messages" class="<%= currentPath.startsWith('/admin/messages') ? 'on' : '' %>">پیام‌ها</a>
+      <a href="/admin/settings" class="<%= currentPath.startsWith('/admin/settings') ? 'on' : '' %>">تنظیمات سایت</a>
+      <a href="/" target="_blank">مشاهده سایت</a>
+    </nav>
+    <form method="post" action="/admin/logout"><button type="submit">خروج</button></form>
+  </aside>
+  <main class="main">
+    <header class="top">
+      <h1><%= title %></h1>
+      <div class="actions"><% if (typeof actions !== 'undefined') { %><%- actions %><% } %></div>
+    </header>
+    <div class="content">

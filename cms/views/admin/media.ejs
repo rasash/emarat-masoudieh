@@ -1,0 +1,24 @@
+<%- include("_head", { title: "کتابخانه رسانه", actions: "" }) %>
+<form class="panel upload-box" method="post" action="/admin/media" enctype="multipart/form-data">
+  <h2>آپلود عکس جدید</h2>
+  <input type="file" name="files" accept="image/*" multiple required />
+  <label>متن جایگزین پیش‌فرض
+    <input name="alt" placeholder="توضیح کوتاه عکس" />
+  </label>
+  <button class="btn" type="submit">آپلود</button>
+</form>
+<div class="media-grid">
+  <% items.forEach(function (item) { %>
+    <article class="media-card">
+      <img src="<%= mediaUrl(item) %>" alt="<%= item.alt %>" />
+      <form method="post" action="/admin/media/<%= item.id %>">
+        <input name="alt" value="<%= item.alt %>" placeholder="متن جایگزین" />
+        <button class="btn ghost" type="submit">ذخیره توضیح</button>
+      </form>
+      <form method="post" action="/admin/media/<%= item.id %>/delete" onsubmit="return confirm('حذف این عکس؟');">
+        <button class="btn danger" type="submit">حذف</button>
+      </form>
+    </article>
+  <% }) %>
+</div>
+<%- include("_foot") %>

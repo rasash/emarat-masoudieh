@@ -1,0 +1,20 @@
+<%- include("_head", { title: "پیام‌ها", actions: "" }) %>
+<% if (!items.length) { %>
+  <p class="hint">پیامی ثبت نشده است.</p>
+<% } %>
+<div class="msg-list">
+  <% items.forEach(function (m) { %>
+    <article class="panel">
+      <header class="msg-head">
+        <strong><%= m.name %></strong>
+        <span><%= m.email %></span>
+        <em><%= m.topic %></em>
+      </header>
+      <p><%= m.body %></p>
+      <form method="post" action="/admin/messages/<%= m.id %>/delete">
+        <button class="btn danger" type="submit">حذف</button>
+      </form>
+    </article>
+  <% }) %>
+</div>
+<%- include("_foot") %>

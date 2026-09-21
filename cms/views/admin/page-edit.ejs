@@ -1,0 +1,88 @@
+<%- include("_head", { title: page ? "ویرایش صفحه" : "صفحه جدید", actions: page ? '<a class="btn ghost" href="' + (page.is_home ? "/" : "/p/" + page.slug) + '" target="_blank">مشاهده</a>' : "" }) %>
+<form class="page-form" method="post" id="pageForm" action="<%= page ? '/admin/pages/' + page.id : '/admin/pages/new' %>">
+  <% if (typeof currentPath !== 'undefined' && currentPath.includes("saved")) { %>
+  <% } %>
+  <section class="panel">
+    <h2>مشخصات صفحه</h2>
+    <div class="grid2">
+      <label>عنوان صفحه
+        <input name="title" required value="<%= page ? page.title : "" %>" />
+      </label>
+      <label>نامک انگلیسی (آدرس)
+        <input name="slug" dir="ltr" required value="<%= page ? page.slug : "" %>" placeholder="about-mansion" />
+      </label>
+      <label>زیرعنوان / ابرو
+        <input name="subtitle" value="<%= page ? page.subtitle : "" %>" />
+      </label>
+      <label>قالب
+        <select name="template">
+          <option value="page" <%= !page || page.template === "page" ? "selected" : "" %>>صفحه معمولی</option>
+          <option value="home" <%= page && page.template === "home" ? "selected" : "" %>>خانه</option>
+          <option value="contact" <%= page && page.template === "contact" ? "selected" : "" %>>ارتباط با ما (فرم تماس)</option>
+        </select>
+      </label>
+    </div>
+    <label>خلاصه / متن روی عکس بزرگ
+      <textarea name="excerpt" rows="3"><%= page ? page.excerpt : "" %></textarea>
+    </label>
+    <div class="hero-pick">
+      <span>عکس سربرگ صفحه</span>
+      <input type="hidden" name="hero_media_id" id="heroMediaId" value="<%= page && page.hero_media_id ? page.hero_media_id : "" %>" />
+      <div class="pick-preview" data-pick="heroMediaId">
+        <% if (page && page.hero) { %>
+          <img src="<%= mediaUrl(page.hero) %>" alt="" />
+        <% } else { %>
+          <em>عکسی انتخاب نشده</em>
+        <% } %>
+      </div>
+      <button type="button" class="btn ghost" data-open-picker="heroMediaId">انتخاب / تغییر عکس</button>
+    </div>
+    <div class="checks">
+      <label><input type="checkbox" name="published" <%= !page || page.published ? "checked" : "" %> /> منتشر شود</label>
+      <label><input type="checkbox" name="is_home" <%= page && page.is_home ? "checked" : "" %> /> صفحه خانه</label>
+      <label><input type="checkbox" name="show_in_nav" <%= !page || page.show_in_nav ? "checked" : "" %> /> نمایش در سربرگ</label>
+    </div>
+    <div class="grid3">
+      <label>عنوان سربرگ
+        <input name="nav_label" value="<%= page ? page.nav_label : "" %>" />
+      </label>
+      <label>زیرعنوان سربرگ
+        <input name="nav_sublabel" value="<%= page ? page.nav_sublabel : "" %>" />
+      </label>
+      <label>ترتیب سربرگ
+        <input name="nav_order" type="number" value="<%= page ? page.nav_order : 10 %>" />
+      </label>
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="panel-head">
+      <h2>محتوای صفحه (بلوک‌ها)</h2>
+      <div class="add-blocks">
+        <button type="button" data-add="split">متن + عکس</button>
+        <button type="button" data-add="rich">متن آزاد</button>
+        <button type="button" data-add="cards">کارت‌ها</button>
+        <button type="button" data-add="gallery">گالری</button>
+        <button type="button" data-add="timeline">خط زمان</button>
+        <button type="button" data-add="news">اخبار</button>
+      </div>
+    </div>
+    <p class="hint">هر بلوک را می‌توانید بالا/پایین ببرید، عکس و متنش را عوض کنید یا حذف کنید. صفحه جدید را هم همین‌طور از صفر می‌چینید.</p>
+    <div id="blockList"></div>
+  </section>
+
+  <input type="hidden" name="blocks_json" id="blocksJson" />
+  <div class="form-actions">
+    <button class="btn" type="submit">ذخیره صفحه</button>
+    <% if (page && !page.is_home) { %>
+      <button class="btn danger" type="submit" form="deleteForm">حذف صفحه</button>
+    <% } %>
+  </div>
+</form>
+<% if (page && !page.is_home) { %>
+  <form id="deleteForm" method="post" action="/admin/pages/<%= page.id %>/delete" onsubmit="return confirm('این صفحه حذف شود؟');"></form>
+<% } %>
+<script>
+  window.PAGE_BLOCKS = <%- JSON.stringify(blocks).replace(/</g, "\\u003c") %>;
+</script>
+<%- include("_foot") %>

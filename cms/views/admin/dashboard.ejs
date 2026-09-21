@@ -1,0 +1,16 @@
+<%- include("_head", { title: "داشبورد", actions: '<a class="btn" href="/admin/pages/new">صفحه جدید</a>' }) %>
+<div class="stats">
+  <article><b><%= pages %></b><span>صفحه</span></article>
+  <article><b><%= media %></b><span>فایل رسانه</span></article>
+  <article><b><%= unread %></b><span>پیام خوانده‌نشده</span></article>
+</div>
+<div class="help">
+  <h2>از کجا شروع کنم؟</h2>
+  <ol>
+    <li>از <a href="/admin/pages">صفحات</a> متن، عکس سربرگ و بلوک‌های هر صفحه را عوض کنید.</li>
+    <li>از <a href="/admin/media">کتابخانه رسانه</a> عکس جدید آپلود کنید و بعد در صفحات انتخاب کنید.</li>
+    <li>صفحه جدید بسازید و اگر لازم است آن را در سربرگ نمایش دهید.</li>
+    <li>نام سایت، نشانی و تماس را در <a href="/admin/settings">تنظیمات</a> تغییر دهید.</li>
+  </ol>
+</div>
+<%- include("_foot") %>

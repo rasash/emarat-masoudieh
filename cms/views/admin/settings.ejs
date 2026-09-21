@@ -1,0 +1,31 @@
+<%- include("_head", { title: "تنظیمات سایت", actions: "" }) %>
+<form class="panel" method="post" action="/admin/settings">
+  <h2>هویت مجموعه</h2>
+  <div class="grid2">
+    <label>نام سایت <input name="site_name" value="<%= s.site_name || "" %>" /></label>
+    <label>شعار <input name="site_tagline" value="<%= s.site_tagline || "" %>" /></label>
+    <label>حرف نشان <input name="brand_letter" value="<%= s.brand_letter || "م" %>" /></label>
+    <label>توضیح سئو <input name="seo_description" value="<%= s.seo_description || "" %>" /></label>
+  </div>
+  <h2>نوار بالای سربرگ</h2>
+  <div class="grid2">
+    <label>سمت راست <input name="topbar_right" value="<%= s.topbar_right || "" %>" /></label>
+    <label>سمت چپ <input name="topbar_left" value="<%= s.topbar_left || "" %>" /></label>
+  </div>
+  <h2>تماس و پاورقی</h2>
+  <label>درباره در پاورقی <textarea name="footer_about" rows="3"><%= s.footer_about || "" %></textarea></label>
+  <label>کپی‌رایت <input name="footer_copy" value="<%= s.footer_copy || "" %>" /></label>
+  <label>نشانی <textarea name="address" rows="2"><%= s.address || "" %></textarea></label>
+  <label>دسترسی <textarea name="access" rows="2"><%= s.access || "" %></textarea></label>
+  <div class="grid2">
+    <label>تلفن <input name="phone" value="<%= s.phone || "" %>" /></label>
+    <label>ایمیل <input name="email" value="<%= s.email || "" %>" /></label>
+  </div>
+  <h2>ورود پنل</h2>
+  <div class="grid2">
+    <label>نام کاربری <input name="admin_user" value="<%= s.admin_user || "admin" %>" /></label>
+    <label>رمز جدید (خالی = بدون تغییر) <input name="new_password" type="password" /></label>
+  </div>
+  <button class="btn" type="submit">ذخیره تنظیمات</button>
+</form>
+<%- include("_foot") %>

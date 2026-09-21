@@ -1,0 +1,30 @@
+<%- include("_head", { title: "صفحات", actions: '<a class="btn" href="/admin/pages/new">صفحه جدید</a>' }) %>
+<table class="table">
+  <thead>
+    <tr>
+      <th>عنوان</th>
+      <th>نشانی</th>
+      <th>سربرگ</th>
+      <th>وضعیت</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% pages.forEach(function (p) { %>
+      <tr>
+        <td>
+          <strong><%= p.title %></strong>
+          <% if (p.is_home) { %><em class="tag">خانه</em><% } %>
+        </td>
+        <td dir="ltr">/p/<%= p.slug %></td>
+        <td><%= p.show_in_nav ? (p.nav_label || p.title) : "—" %></td>
+        <td><%= p.published ? "منتشر" : "پیش‌نویس" %></td>
+        <td class="row-actions">
+          <a href="/admin/pages/<%= p.id %>">ویرایش</a>
+          <a href="<%= p.is_home ? '/' : '/p/' + p.slug %>" target="_blank">نمایش</a>
+        </td>
+      </tr>
+    <% }) %>
+  </tbody>
+</table>
+<%- include("_foot") %>

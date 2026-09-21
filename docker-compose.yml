@@ -1,0 +1,15 @@
+name: masoudieh
+
+services:
+  masoudieh:
+    build: .
+    container_name: masoudieh-site
+    ports:
+      - "8060:80"
+    restart: unless-stopped
+    environment:
+      ADMIN_USER: ${ADMIN_USER:-admin}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-}
+      SESSION_SECRET: ${SESSION_SECRET:-change-this-secret-on-server}
+    volumes:
+      - ./data:/app/data

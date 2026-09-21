@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= page.is_home ? (settings.site_name + " | " + settings.site_tagline) : (page.title + " | " + settings.site_name) %></title>
+  <meta name="description" content="<%= page.excerpt || settings.seo_description || "" %>" />
+  <link rel="icon" href="/favicon.svg" />
+  <link rel="stylesheet" href="/css/site.css" />
+</head>
+<body>
+  <div class="topbar">
+    <div class="wrap">
+      <span><%= settings.topbar_right %></span>
+      <span><%= settings.topbar_left %></span>
+    </div>
+  </div>
+  <header class="header" id="mainHeader">
+    <div class="wrap header-inner">
+      <a class="brand" href="/">
+        <div class="brand-mark"><%= settings.brand_letter || "م" %></div>
+        <div>
+          <strong><%= settings.site_name %></strong>
+          <span><%= settings.site_tagline %></span>
+        </div>
+      </a>
+      <button class="menu-btn" type="button" id="menuBtn">منو</button>
+      <nav class="nav" id="mainNav">
+        <% nav.forEach(function (item) { %>
+          <a class="<%= page.slug === item.slug ? 'active' : '' %>" href="/p/<%= item.slug %>">
+            <span class="n1"><%= item.nav_label || item.title %></span>
+            <% if (item.nav_sublabel) { %><span class="n2"><%= item.nav_sublabel %></span><% } %>
+          </a>
+        <% }) %>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero <%= page.is_home ? 'hero-home' : 'page-hero' %>">
+    <% if (page.hero) { %>
+      <img src="<%= mediaUrl(page.hero) %>" alt="<%= page.hero.alt || page.title %>" />
+    <% } %>
+    <div class="<%= page.is_home ? 'hero-copy' : 'inner' %>">
+      <% if (page.subtitle) { %><div class="eyebrow"><%= page.subtitle %></div><% } %>
+      <h1><%= page.title %></h1>
+      <% if (page.excerpt) { %><p><%= page.excerpt %></p><% } %>
+      <% if (page.is_home && nav.length) { %>
+        <div class="hero-actions">
+          <a class="btn btn-gold" href="/p/<%= nav[0].slug %>"><%= nav[0].nav_label || nav[0].title %></a>
+          <% if (nav[1]) { %><a class="btn btn-ghost" href="/p/<%= nav[1].slug %>"><%= nav[1].nav_label || nav[1].title %></a><% } %>
+        </div>
+      <% } %>
+    </div>
+  </section>
+
+  <% page.blocks.forEach(function (block, idx) {
+       const d = withMedia(block.data || {});
+       const alt = idx % 2 === 1;
+  %>
+    <% if (block.type === "split") { %>
+      <section class="section <%= alt ? 'alt' : '' %>">
+        <div class="wrap split">
+          <div>
+            <% if (d.kicker) { %><div class="kicker"><%= d.kicker %></div><% } %>
+            <% if (d.title) { %><h2><%= d.title %></h2><% } %>
+            <% (d.body || "").split(/\n\n+/).forEach(function (p) { %>
+              <p class="muted"><%= p %></p>
+            <% }) %>
+            <% if (d.facts && d.facts.length) { %>
+              <div class="facts">
+                <% d.facts.forEach(function (f) { %>
+                  <div class="fact"><b><%= f.value %></b><span><%= f.label %></span></div>
+                <% }) %>
+              </div>
+            <% } %>
+          </div>
+          <% if (d.media) { %><img src="<%= mediaUrl(d.media) %>" alt="<%= d.media.alt || d.title || "" %>" /><% } %>
+        </div>
+      </section>
+    <% } %>
+
+    <% if (block.type === "rich") { %>
+      <section class="section <%= alt ? 'alt' : '' %>">
+        <div class="wrap prose"><%- d.html || d.body || "" %></div>
+      </section>
+    <% } %>
+
+    <% if (block.type === "cards") { %>
+      <section class="section <%= alt ? 'alt' : '' %>">
+        <div class="wrap">
+          <div class="section-head">
+            <% if (d.kicker) { %><div class="kicker"><%= d.kicker %></div><% } %>
+            <% if (d.title) { %><h2><%= d.title %></h2><% } %>
+            <% if (d.intro) { %><p class="muted"><%= d.intro %></p><% } %>
+          </div>
+          <div class="cards">
+            <% (d.items || []).forEach(function (item) { %>
+              <article class="card">
+                <% if (item.media) { %><img src="<%= mediaUrl(item.media) %>" alt="<%= item.media.alt || item.title || "" %>" /><% } %>
+                <div class="body">
+                  <h3><%= item.title %></h3>
+                  <p><%= item.body %></p>
+                  <% if (item.link) { %><a class="more" href="<%= item.link %>"><%= item.link_label || "ادامه" %> ←</a><% } %>
+                </div>
+              </article>
+            <% }) %>
+          </div>
+        </div>
+      </section>
+    <% } %>
+
+    <% if (block.type === "gallery") { %>
+      <section class="section <%= alt ? 'alt' : '' %>">
+        <div class="wrap">
+          <div class="section-head">
+            <% if (d.kicker) { %><div class="kicker"><%= d.kicker %></div><% } %>
+            <% if (d.title) { %><h2><%= d.title %></h2><% } %>
+          </div>
+          <div class="gallery">
+            <% (d.items || []).forEach(function (item) { %>
+              <% if (item.media) { %>
+                <figure>
+                  <img src="<%= mediaUrl(item.media) %>" alt="<%= item.caption || item.media.alt || "" %>" data-full="<%= mediaUrl(item.media) %>" />
+                  <% if (item.caption) { %><figcaption><%= item.caption %></figcaption><% } %>
+                </figure>
+              <% } %>
+            <% }) %>
+          </div>
+        </div>
+      </section>
+    <% } %>
+
+    <% if (block.type === "timeline") { %>
+      <section class="section <%= alt ? 'alt' : '' %>">
+        <div class="wrap">
+          <div class="section-head">
+            <% if (d.kicker) { %><div class="kicker"><%= d.kicker %></div><% } %>
+            <% if (d.title) { %><h2><%= d.title %></h2><% } %>
+          </div>
+          <div class="timeline">
+            <% (d.items || []).forEach(function (item) { %>
+              <div class="t-item">
+                <span><%= item.date %></span>
+                <h3><%= item.title %></h3>
+                <p class="muted"><%= item.body %></p>
+              </div>
+            <% }) %>
+          </div>
+        </div>
+      </section>
+    <% } %>
+
+    <% if (block.type === "news") { %>
+      <section class="section <%= alt ? 'alt' : '' %>">
+        <div class="wrap">
+          <div class="section-head">
+            <% if (d.kicker) { %><div class="kicker"><%= d.kicker %></div><% } %>
+            <% if (d.title) { %><h2><%= d.title %></h2><% } %>
+            <% if (d.intro) { %><p class="muted"><%= d.intro %></p><% } %>
+          </div>
+          <div class="news-list">
+            <% (d.items || []).forEach(function (item) { %>
+              <article class="news">
+                <% if (item.media) { %><img src="<%= mediaUrl(item.media) %>" alt="<%= item.media.alt || item.title || "" %>" /><% } %>
+                <div class="body">
+                  <% if (item.date) { %><time><%= item.date %></time><% } %>
+                  <h3><%= item.title %></h3>
+                  <p class="muted"><%= item.body %></p>
+                </div>
+              </article>
+            <% }) %>
+          </div>
+        </div>
+      </section>
+    <% } %>
+  <% }) %>
+
+  <% if (page.template === "contact") { %>
+    <section class="section">
+      <div class="wrap contact-grid">
+        <div class="panel">
+          <div class="kicker">دبیرخانه مجموعه</div>
+          <h2>راه‌های ارتباط</h2>
+          <div class="info-list">
+            <div><b>نشانی</b><span class="muted"><%= settings.address %></span></div>
+            <div><b>دسترسی</b><span class="muted"><%= settings.access %></span></div>
+            <div><b>تلفن</b><span class="muted"><%= settings.phone %></span></div>
+            <div><b>ایمیل</b><span class="muted"><%= settings.email %></span></div>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="kicker">فرم پیام</div>
+          <h2>درخواست بازدید یا همکاری</h2>
+          <form class="form" method="post" action="/p/<%= page.slug %>/message">
+            <label>نام و نام خانوادگی <input name="name" required /></label>
+            <label>ایمیل یا تلفن <input name="email" required /></label>
+            <label>موضوع
+              <select name="topic">
+                <option>بازدید گروهی</option>
+                <option>رویداد و نمایشگاه</option>
+                <option>پژوهش و دانشنامه</option>
+                <option>رسانه و اتاق خبر</option>
+                <option>سایر</option>
+              </select>
+            </label>
+            <label>پیام <textarea name="msg" required></textarea></label>
+            <button class="btn btn-solid" type="submit">ارسال پیام</button>
+          </form>
+          <% if (querySent) { %>
+            <div class="toast">پیام شما ثبت شد و در پنل مدیریت قابل مشاهده است.</div>
+          <% } %>
+        </div>
+      </div>
+    </section>
+  <% } %>
+
+  <footer class="footer">
+    <div class="wrap footer-grid">
+      <div>
+        <h3><%= settings.site_name %></h3>
+        <p><%= settings.footer_about %></p>
+      </div>
+      <div>
+        <h3>صفحات</h3>
+        <% nav.forEach(function (item) { %>
+          <a href="/p/<%= item.slug %>"><%= item.nav_label || item.title %></a>
+        <% }) %>
+      </div>
+      <div>
+        <h3>بازدید</h3>
+        <a href="/p/contact"><%= settings.address %></a>
+        <a href="/p/contact"><%= settings.phone %></a>
+        <a href="/p/contact"><%= settings.email %></a>
+      </div>
+    </div>
+    <div class="wrap copy">
+      <span><%= settings.footer_copy %></span>
+    </div>
+  </footer>
+  <div class="lightbox" id="lightbox" hidden><img alt="" /><button type="button">بستن</button></div>
+  <script src="/js/site.js"></script>
+</body>
+</html>

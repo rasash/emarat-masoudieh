@@ -1,0 +1,140 @@
+@font-face {
+  font-family: Vazirmatn;
+  src: url("/fonts/Vazirmatn-Regular.woff2") format("woff2");
+  font-weight: 400;
+}
+@font-face {
+  font-family: Vazirmatn;
+  src: url("/fonts/Vazirmatn-Bold.woff2") format("woff2");
+  font-weight: 700;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: Vazirmatn, Tahoma, sans-serif;
+  background: #f4ead8;
+  color: #2a1810;
+  display: flex;
+  min-height: 100vh;
+}
+a { color: #722c2c; }
+button, input, textarea, select { font-family: inherit; }
+.sidebar {
+  width: 230px;
+  background: #2b140f;
+  color: #f3e6c8;
+  padding: 22px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #f3e6c8;
+  text-decoration: none;
+}
+.brand span {
+  width: 36px; height: 36px; border: 1px solid #c9a45c;
+  display: grid; place-items: center; font-weight: 700;
+}
+.sidebar nav { display: grid; gap: 6px; }
+.sidebar nav a {
+  color: #ead9b8;
+  text-decoration: none;
+  padding: 8px 10px;
+  border-radius: 8px;
+}
+.sidebar nav a.on, .sidebar nav a:hover { background: rgba(201,164,92,.16); color: #fff; }
+.sidebar form button {
+  background: transparent; color: #cbb89a; border: 1px solid #8d6a2e;
+  padding: 8px 10px; border-radius: 8px; cursor: pointer; width: 100%;
+}
+.main { flex: 1; min-width: 0; }
+.top {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 22px 28px 8px;
+}
+.top h1 { margin: 0; font-size: 24px; }
+.content { padding: 8px 28px 40px; }
+.btn {
+  background: #722c2c; color: #fff; border: 0; border-radius: 8px;
+  padding: 9px 16px; text-decoration: none; display: inline-block; cursor: pointer;
+}
+.btn.ghost { background: transparent; color: #722c2c; border: 1px solid #c9a45c; }
+.btn.danger { background: #8b1e1e; }
+.panel {
+  background: #fff; border: 1px solid rgba(141,106,46,.18);
+  border-radius: 16px; padding: 20px; margin-bottom: 18px;
+}
+.panel h2 { margin: 0 0 14px; font-size: 18px; }
+label { display: grid; gap: 6px; font-size: 13px; font-weight: 700; margin-bottom: 12px; }
+input, textarea, select {
+  width: 100%; padding: 9px 11px; border: 1px solid #d9c9a6;
+  border-radius: 8px; background: #fbf6eb;
+}
+.grid2, .grid3 { display: grid; gap: 12px; }
+.grid2 { grid-template-columns: 1fr 1fr; }
+.grid3 { grid-template-columns: 1fr 1fr 1fr; }
+.checks { display: flex; gap: 18px; flex-wrap: wrap; margin: 10px 0 16px; }
+.checks label { display: flex; align-items: center; gap: 8px; font-weight: 500; }
+.table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 12px; overflow: hidden; }
+.table th, .table td { text-align: right; padding: 12px; border-bottom: 1px solid #efe4cd; }
+.tag { background: #c9a45c; color: #2a1810; font-style: normal; font-size: 11px; padding: 2px 8px; border-radius: 99px; margin-right: 8px; }
+.row-actions { display: flex; gap: 10px; }
+.stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 20px; }
+.stats article { background: #fff; padding: 18px; border-radius: 14px; text-align: center; }
+.stats b { display: block; font-size: 28px; color: #722c2c; }
+.help, .hint { color: #5a4336; }
+.pick-preview {
+  width: 100%; max-width: 420px; height: 180px; background: #efe4cd;
+  border-radius: 12px; overflow: hidden; display: grid; place-items: center; margin: 8px 0;
+}
+.pick-preview img { width: 100%; height: 100%; object-fit: cover; }
+.panel-head { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; align-items: center; }
+.add-blocks { display: flex; flex-wrap: wrap; gap: 6px; }
+.add-blocks button {
+  border: 1px solid #c9a45c; background: #fbf6eb; border-radius: 99px;
+  padding: 6px 10px; cursor: pointer;
+}
+.block {
+  border: 1px dashed #d4b56a; border-radius: 12px; padding: 14px; margin: 12px 0; background: #fffdf8;
+}
+.block-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+.block-top b { color: #722c2c; }
+.item-row { background: #fff; border: 1px solid #efe4cd; border-radius: 10px; padding: 10px; margin: 8px 0; }
+.thumb { width: 88px; height: 64px; object-fit: cover; border-radius: 8px; background: #efe4cd; }
+.form-actions { display: flex; gap: 10px; }
+.media-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; }
+.media-card { background: #fff; border-radius: 12px; overflow: hidden; padding-bottom: 10px; }
+.media-card img { width: 100%; height: 140px; object-fit: cover; }
+.media-card form { padding: 8px 10px; }
+.login-body { display: grid; place-items: center; background: #2b140f; }
+.login-card {
+  width: min(420px, 92vw); background: #fbf6eb; padding: 28px; border-radius: 18px;
+}
+.login-card .mark {
+  width: 48px; height: 48px; border: 1px solid #c9a45c; display: grid; place-items: center; font-weight: 700;
+}
+.login-card button { width: 100%; background: #722c2c; color: #fff; border: 0; padding: 12px; border-radius: 10px; cursor: pointer; }
+.alert { background: #f8d7da; color: #842029; padding: 8px 10px; border-radius: 8px; margin: 10px 0; }
+.picker {
+  position: fixed; inset: 0; background: rgba(20,10,6,.55); display: grid; place-items: center; z-index: 50;
+}
+.picker[hidden] { display: none; }
+.picker-box { width: min(900px, 94vw); max-height: 86vh; overflow: auto; background: #fff; border-radius: 16px; padding: 16px; }
+.picker-box header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+.picker-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
+.picker-grid button { border: 0; padding: 0; background: transparent; cursor: pointer; }
+.picker-grid img { width: 100%; height: 110px; object-fit: cover; border-radius: 8px; }
+.upload-inline { display: grid; gap: 6px; margin-bottom: 12px; }
+.msg-head { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 8px; }
+@media (max-width: 900px) {
+  body { display: block; }
+  .sidebar { width: auto; height: auto; position: relative; }
+  .grid2, .grid3, .stats { grid-template-columns: 1fr; }
+}
