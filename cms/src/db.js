@@ -26,6 +26,8 @@ function openDb() {
       filename TEXT NOT NULL,
       original_name TEXT,
       alt TEXT DEFAULT '',
+      category TEXT DEFAULT '',
+      variants TEXT DEFAULT '{}',
       created_at TEXT NOT NULL
     );
     CREATE TABLE IF NOT EXISTS pages (
@@ -42,6 +44,7 @@ function openDb() {
       nav_order INTEGER DEFAULT 0,
       published INTEGER DEFAULT 1,
       template TEXT DEFAULT 'page',
+      seo_description TEXT DEFAULT '',
       created_at TEXT NOT NULL,
       updated_at TEXT NOT NULL
     );

@@ -1,0 +1,16 @@
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= page.is_home ? (settings.site_name + " | " + settings.site_tagline) : (page.title + " | " + settings.site_name) %></title>
+  <% const desc = page.seo_description || page.excerpt || settings.seo_description || ""; %>
+  <meta name="description" content="<%= desc %>" />
+  <link rel="canonical" href="<%= ogUrl %>" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="<%= page.title %> | <%= settings.site_name %>" />
+  <meta property="og:description" content="<%= desc %>" />
+  <meta property="og:url" content="<%= ogUrl %>" />
+  <% if (page.hero) { %>
+  <meta property="og:image" content="<%= siteOrigin %><%= (typeof mediaSrc === 'function' ? mediaSrc(page.hero) : mediaUrl(page.hero)) %>" />
+  <% } %>
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" href="/favicon.svg" />
+  <link rel="stylesheet" href="/css/site.css" />

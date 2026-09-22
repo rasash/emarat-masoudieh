@@ -11,5 +11,6 @@ services:
       ADMIN_USER: ${ADMIN_USER:-admin}
       ADMIN_PASSWORD: ${ADMIN_PASSWORD:-}
       SESSION_SECRET: ${SESSION_SECRET:-change-this-secret-on-server}
+      SITE_URL: ${SITE_URL:-}
     volumes:
       - ./data:/app/data

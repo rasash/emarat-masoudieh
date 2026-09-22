@@ -1,0 +1,20 @@
+<%- include("_head", { title: "نقشه فضاها", actions: "" }) %>
+<p class="hint">نقطه‌ها روی عکس حیاط با درصد افقی (X) و عمودی (Y) جابه‌جا می‌شوند. مثلاً ۵۰ و ۵۰ وسط تصویر است.</p>
+<% items.forEach(function (item) { %>
+  <form class="panel" method="post" action="/admin/spaces/<%= item.id %>">
+    <h2><%= item.title %></h2>
+    <div class="grid2">
+      <label>عنوان <input name="title" value="<%= item.title %>" /></label>
+      <label>متن <textarea name="body" rows="3"><%= item.body %></textarea></label>
+      <label>X درصد <input name="x" type="number" min="0" max="100" step="0.5" value="<%= item.x %>" /></label>
+      <label>Y درصد <input name="y" type="number" min="0" max="100" step="0.5" value="<%= item.y %>" /></label>
+    </div>
+    <div class="hero-pick">
+      <input type="hidden" name="media_id" data-k="media_id" value="<%= item.media_id || "" %>" />
+      <div class="pick-preview"><% if (item.media) { %><img src="<%= mediaUrl(item.media) %>" alt="" /><% } else { %><em>عکس</em><% } %></div>
+      <button type="button" class="btn ghost" data-open-picker="space-<%= item.id %>">تغییر عکس</button>
+    </div>
+    <button class="btn" type="submit">ذخیره فضا</button>
+  </form>
+<% }) %>
+<%- include("_foot") %>

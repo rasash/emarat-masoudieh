@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<%- include("_meta") %>
+</head>
+<body>
+<%- include("_header") %>
+  <section class="hero page-hero">
+    <% if (item.media) { %>
+      <%- picture(item.media, { eager: true, sizes: "100vw", alt: item.title }) %>
+    <% } %>
+    <div class="inner">
+      <div class="eyebrow"><%= item.category %> · <%= item.date %></div>
+      <h1><%= item.title %></h1>
+      <% if (item.excerpt) { %><p><%= item.excerpt %></p><% } %>
+    </div>
+  </section>
+  <section class="section">
+    <div class="wrap prose">
+      <% (item.body || "").split(/\n\n+/).forEach(function (p) { %>
+        <p><%= p %></p>
+      <% }) %>
+      <p><a class="btn btn-outline" href="/p/news">بازگشت به اتاق رسانه</a></p>
+    </div>
+  </section>
+<%- include("_footer") %>
+</body>
+</html>

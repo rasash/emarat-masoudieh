@@ -1,44 +1,14 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title><%= page.is_home ? (settings.site_name + " | " + settings.site_tagline) : (page.title + " | " + settings.site_name) %></title>
-  <meta name="description" content="<%= page.excerpt || settings.seo_description || "" %>" />
-  <link rel="icon" href="/favicon.svg" />
-  <link rel="stylesheet" href="/css/site.css" />
+<%- include("_meta") %>
 </head>
 <body>
-  <div class="topbar">
-    <div class="wrap">
-      <span><%= settings.topbar_right %></span>
-      <span><%= settings.topbar_left %></span>
-    </div>
-  </div>
-  <header class="header" id="mainHeader">
-    <div class="wrap header-inner">
-      <a class="brand" href="/">
-        <div class="brand-mark"><%= settings.brand_letter || "م" %></div>
-        <div>
-          <strong><%= settings.site_name %></strong>
-          <span><%= settings.site_tagline %></span>
-        </div>
-      </a>
-      <button class="menu-btn" type="button" id="menuBtn">منو</button>
-      <nav class="nav" id="mainNav">
-        <% nav.forEach(function (item) { %>
-          <a class="<%= page.slug === item.slug ? 'active' : '' %>" href="/p/<%= item.slug %>">
-            <span class="n1"><%= item.nav_label || item.title %></span>
-            <% if (item.nav_sublabel) { %><span class="n2"><%= item.nav_sublabel %></span><% } %>
-          </a>
-        <% }) %>
-      </nav>
-    </div>
-  </header>
+<%- include("_header") %>
 
   <section class="hero <%= page.is_home ? 'hero-home' : 'page-hero' %>">
     <% if (page.hero) { %>
-      <img src="<%= mediaUrl(page.hero) %>" alt="<%= page.hero.alt || page.title %>" />
+      <%- picture(page.hero, { eager: true, sizes: "100vw", alt: page.hero.alt || page.title }) %>
     <% } %>
     <div class="<%= page.is_home ? 'hero-copy' : 'inner' %>">
       <% if (page.subtitle) { %><div class="eyebrow"><%= page.subtitle %></div><% } %>
@@ -47,15 +17,144 @@
       <% if (page.is_home && nav.length) { %>
         <div class="hero-actions">
           <a class="btn btn-gold" href="/p/<%= nav[0].slug %>"><%= nav[0].nav_label || nav[0].title %></a>
-          <% if (nav[1]) { %><a class="btn btn-ghost" href="/p/<%= nav[1].slug %>"><%= nav[1].nav_label || nav[1].title %></a><% } %>
+          <a class="btn btn-ghost" href="/p/visit">ساعات بازدید و مسیر</a>
         </div>
       <% } %>
     </div>
   </section>
 
+  <% if (page.is_home || page.template === "visit" || page.template === "contact") { %>
+    <section class="visit-strip">
+      <div class="wrap visit-grid">
+        <div>
+          <span class="kicker">ساعات بازدید</span>
+          <strong><%= settings.visit_hours || "۹ تا ۱۶" %></strong>
+          <small><%= settings.visit_days || "همه روزه به‌جز دوشنبه‌ها" %></small>
+        </div>
+        <div>
+          <span class="kicker">بلیت</span>
+          <strong><%= settings.ticket_info || "ورود با تهیه بلیت" %></strong>
+        </div>
+        <div>
+          <span class="kicker">مسیر</span>
+          <strong><%= settings.metro_info || settings.access %></strong>
+        </div>
+        <% if (page.template !== "visit") { %>
+          <a class="btn btn-outline" href="/p/visit">جزئیات بازدید</a>
+        <% } %>
+      </div>
+    </section>
+  <% } %>
+
+  <% if (page.is_home) { %>
+    <section class="section story-band">
+      <div class="wrap story">
+        <div>
+          <div class="kicker">روایت کوتاه</div>
+          <h2>از باغ نظامیه تا حافظه زندهٔ بهارستان</h2>
+          <p class="muted">مسعود میرزا این خانه را برای اقامت در تهران ساخت؛ بعدتر مشروطه‌خواهان، کتابخانه و موزهٔ آغازین، و وزارت معارف از همین رواق‌ها گذشتند. امروز مسعودیه جایی است برای دیدن معماری قاجار، شنیدن تاریخ پایتخت، و آموختن در دل اثر.</p>
+        </div>
+        <ol class="story-steps">
+          <li><b>ورود از اکباتان</b><span>سردر و کتیبه‌ها نخستین نشانهٔ هویت نوشتاری مجموعه‌اند.</span></li>
+          <li><b>حیاط و حوض</b><span>نور، کاشی و انعکاس آب، ریتم باغ ایرانی را نگه می‌دارند.</span></li>
+          <li><b>دیوان‌خانه</b><span>تشریفات، آینه‌کاری و گچ‌بری؛ قلب رسمی عمارت.</span></li>
+        </ol>
+      </div>
+    </section>
+  <% } %>
+
+  <% if ((page.is_home || page.template === "visit" || page.slug === "about-mansion") && spaces && spaces.length) { %>
+    <section class="section <%= page.is_home ? '' : 'alt' %>">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="kicker">نقشه فضاها</div>
+          <h2>روی حیاط بزنید تا عمارت باز شود</h2>
+          <p class="muted">دیوان‌خانه، سفره‌خانه، حوض‌خانه و عمارت مشیری روی همین نقشه مشخص شده‌اند.</p>
+        </div>
+        <div class="space-layout">
+          <div class="space-map" id="spaceMap">
+            <% if (typeof mapMedia !== "undefined" && mapMedia) { %>
+              <%- picture(mapMedia, { sizes: "(max-width: 800px) 100vw, 720px", className: "map-photo", alt: "نقشه فضاهای عمارت مسعودیه" }) %>
+            <% } else if (spaces[0] && spaces[0].media) { %>
+              <%- picture(spaces[0].media, { sizes: "(max-width: 800px) 100vw, 720px", className: "map-photo", alt: "نقشه فضاهای عمارت مسعودیه" }) %>
+            <% } %>
+            <% spaces.forEach(function (sp, i) { %>
+              <button type="button" class="hotspot <%= i === 0 ? 'on' : '' %>" style="left:<%= sp.x %>%; top:<%= sp.y %>%" data-space="<%= i %>" aria-label="<%= sp.title %>">
+                <span><%= i + 1 %></span>
+              </button>
+            <% }) %>
+          </div>
+          <aside class="space-panel" id="spacePanel">
+            <% spaces.forEach(function (sp, i) { %>
+              <article class="space-card <%= i === 0 ? 'on' : '' %>" data-space-card="<%= i %>">
+                <% if (sp.media) { %><%- picture(sp.media, { sizes: "360px", alt: sp.title }) %><% } %>
+                <h3><%= sp.title %></h3>
+                <p class="muted"><%= sp.body %></p>
+              </article>
+            <% }) %>
+          </aside>
+        </div>
+      </div>
+    </section>
+  <% } %>
+
+  <% if (page.template === "visit") { %>
+    <section class="section alt">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="kicker">تور روایی</div>
+          <h2>از ورودی تا دیوان‌خانه</h2>
+          <p class="muted">یک مسیر کوتاه برای آشنایی با مجموعه؛ عکس‌ها را ورق بزنید.</p>
+        </div>
+        <div class="tour" id="tourWalk">
+          <% const tour = (spaces || []).slice(0, 5); %>
+          <% tour.forEach(function (sp, i) { %>
+            <figure class="tour-slide <%= i === 0 ? 'on' : '' %>" data-tour="<%= i %>">
+              <% if (sp.media) { %><%- picture(sp.media, { eager: i === 0, sizes: "100vw", alt: sp.title }) %><% } %>
+              <figcaption>
+                <span>ایستگاه <%= i + 1 %> از <%= tour.length %></span>
+                <h3><%= sp.title %></h3>
+                <p><%= sp.body %></p>
+              </figcaption>
+            </figure>
+          <% }) %>
+          <div class="tour-nav">
+            <button type="button" data-tour-prev>قبلی</button>
+            <button type="button" data-tour-next>بعدی</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  <% } %>
+
+  <% if (page.is_home && newsItems && newsItems.length) { %>
+    <section class="section alt">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="kicker">اتاق رسانه</div>
+          <h2>تازه‌ترین رویدادها</h2>
+        </div>
+        <div class="news-list">
+          <% newsItems.slice(0, 3).forEach(function (item) { %>
+            <article class="news">
+              <% if (item.media) { %><a href="/news/<%= item.slug %>"><%- picture(item.media, { sizes: "240px", alt: item.title }) %></a><% } %>
+              <div class="body">
+                <time><%= item.date %></time>
+                <h3><a href="/news/<%= item.slug %>"><%= item.title %></a></h3>
+                <p class="muted"><%= item.excerpt || item.body %></p>
+              </div>
+            </article>
+          <% }) %>
+        </div>
+        <p style="margin-top:22px"><a class="btn btn-outline" href="/p/news">همه اخبار</a></p>
+      </div>
+    </section>
+  <% } %>
+
   <% page.blocks.forEach(function (block, idx) {
        const d = withMedia(block.data || {});
        const alt = idx % 2 === 1;
+       if (page.template === "news" && block.type === "news") return;
   %>
     <% if (block.type === "split") { %>
       <section class="section <%= alt ? 'alt' : '' %>">
@@ -74,7 +173,12 @@
               </div>
             <% } %>
           </div>
-          <% if (d.media) { %><img src="<%= mediaUrl(d.media) %>" alt="<%= d.media.alt || d.title || "" %>" /><% } %>
+          <% if (d.media) { %>
+            <figure class="museum-frame">
+              <%- picture(d.media, { sizes: "(max-width: 800px) 100vw, 520px", alt: d.media.alt || d.title || "" }) %>
+              <% if (d.media.alt) { %><figcaption><%= d.media.alt %></figcaption><% } %>
+            </figure>
+          <% } %>
         </div>
       </section>
     <% } %>
@@ -96,7 +200,7 @@
           <div class="cards">
             <% (d.items || []).forEach(function (item) { %>
               <article class="card">
-                <% if (item.media) { %><img src="<%= mediaUrl(item.media) %>" alt="<%= item.media.alt || item.title || "" %>" /><% } %>
+                <% if (item.media) { %><%- picture(item.media, { sizes: "(max-width: 700px) 100vw, 360px", alt: item.media.alt || item.title || "" }) %><% } %>
                 <div class="body">
                   <h3><%= item.title %></h3>
                   <p><%= item.body %></p>
@@ -116,12 +220,19 @@
             <% if (d.kicker) { %><div class="kicker"><%= d.kicker %></div><% } %>
             <% if (d.title) { %><h2><%= d.title %></h2><% } %>
           </div>
-          <div class="gallery">
+          <% const cats = {}; (d.items || []).forEach(function (it) { const c = (it.media && it.media.category) || it.category || ""; if (c) cats[c] = true; }); %>
+          <div class="gallery-filters" data-gallery-filters>
+            <button type="button" class="on" data-filter="*">همه</button>
+            <% Object.keys(cats).forEach(function (c) { %>
+              <button type="button" data-filter="<%= c %>"><%= c %></button>
+            <% }) %>
+          </div>
+          <div class="gallery" data-gallery>
             <% (d.items || []).forEach(function (item) { %>
               <% if (item.media) { %>
-                <figure>
-                  <img src="<%= mediaUrl(item.media) %>" alt="<%= item.caption || item.media.alt || "" %>" data-full="<%= mediaUrl(item.media) %>" />
-                  <% if (item.caption) { %><figcaption><%= item.caption %></figcaption><% } %>
+                <figure data-cat="<%= (item.media && item.media.category) || item.category || '' %>">
+                  <%- picture(item.media, { sizes: "(max-width: 700px) 100vw, 50vw", alt: item.caption || item.media.alt || "" }) %>
+                  <% if (item.caption) { %><figcaption class="museum-cap"><%= item.caption %></figcaption><% } %>
                 </figure>
               <% } %>
             <% }) %>
@@ -137,13 +248,13 @@
             <% if (d.kicker) { %><div class="kicker"><%= d.kicker %></div><% } %>
             <% if (d.title) { %><h2><%= d.title %></h2><% } %>
           </div>
-          <div class="timeline">
-            <% (d.items || []).forEach(function (item) { %>
-              <div class="t-item">
+          <div class="timeline" data-timeline>
+            <% (d.items || []).forEach(function (item, i) { %>
+              <button type="button" class="t-item <%= i === 0 ? 'open' : '' %>">
                 <span><%= item.date %></span>
                 <h3><%= item.title %></h3>
                 <p class="muted"><%= item.body %></p>
-              </div>
+              </button>
             <% }) %>
           </div>
         </div>
@@ -161,7 +272,7 @@
           <div class="news-list">
             <% (d.items || []).forEach(function (item) { %>
               <article class="news">
-                <% if (item.media) { %><img src="<%= mediaUrl(item.media) %>" alt="<%= item.media.alt || item.title || "" %>" /><% } %>
+                <% if (item.media) { %><%- picture(item.media, { sizes: "240px", alt: item.title || "" }) %><% } %>
                 <div class="body">
                   <% if (item.date) { %><time><%= item.date %></time><% } %>
                   <h3><%= item.title %></h3>
@@ -174,6 +285,29 @@
       </section>
     <% } %>
   <% }) %>
+
+  <% if (page.template === "news") { %>
+    <section class="section">
+      <div class="wrap">
+        <div class="section-head">
+          <div class="kicker">اتاق رسانه</div>
+          <h2>اخبار و رویدادها</h2>
+        </div>
+        <div class="news-list">
+          <% (newsItems || []).forEach(function (item) { %>
+            <article class="news">
+              <% if (item.media) { %><a href="/news/<%= item.slug %>"><%- picture(item.media, { sizes: "240px", alt: item.title }) %></a><% } %>
+              <div class="body">
+                <time><%= item.category %> · <%= item.date %></time>
+                <h3><a href="/news/<%= item.slug %>"><%= item.title %></a></h3>
+                <p class="muted"><%= item.excerpt || item.body %></p>
+              </div>
+            </article>
+          <% }) %>
+        </div>
+      </div>
+    </section>
+  <% } %>
 
   <% if (page.template === "contact") { %>
     <section class="section">
@@ -192,6 +326,7 @@
           <div class="kicker">فرم پیام</div>
           <h2>درخواست بازدید یا همکاری</h2>
           <form class="form" method="post" action="/p/<%= page.slug %>/message">
+            <label class="hp" aria-hidden="true" hidden>وب‌سایت <input name="website" tabindex="-1" autocomplete="off" /></label>
             <label>نام و نام خانوادگی <input name="name" required /></label>
             <label>ایمیل یا تلفن <input name="email" required /></label>
             <label>موضوع
@@ -214,30 +349,6 @@
     </section>
   <% } %>
 
-  <footer class="footer">
-    <div class="wrap footer-grid">
-      <div>
-        <h3><%= settings.site_name %></h3>
-        <p><%= settings.footer_about %></p>
-      </div>
-      <div>
-        <h3>صفحات</h3>
-        <% nav.forEach(function (item) { %>
-          <a href="/p/<%= item.slug %>"><%= item.nav_label || item.title %></a>
-        <% }) %>
-      </div>
-      <div>
-        <h3>بازدید</h3>
-        <a href="/p/contact"><%= settings.address %></a>
-        <a href="/p/contact"><%= settings.phone %></a>
-        <a href="/p/contact"><%= settings.email %></a>
-      </div>
-    </div>
-    <div class="wrap copy">
-      <span><%= settings.footer_copy %></span>
-    </div>
-  </footer>
-  <div class="lightbox" id="lightbox" hidden><img alt="" /><button type="button">بستن</button></div>
-  <script src="/js/site.js"></script>
+<%- include("_footer") %>
 </body>
 </html>

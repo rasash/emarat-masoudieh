@@ -86,7 +86,17 @@ input, textarea, select {
 .table th, .table td { text-align: right; padding: 12px; border-bottom: 1px solid #efe4cd; }
 .tag { background: #c9a45c; color: #2a1810; font-style: normal; font-size: 11px; padding: 2px 8px; border-radius: 99px; margin-right: 8px; }
 .row-actions { display: flex; gap: 10px; }
-.stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 20px; }
+.stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 20px; }
+.toast { background: #eaf5ea; color: #245c2a; padding: 10px 12px; border-radius: 10px; margin-bottom: 12px; }
+.editor-bar { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 8px; }
+.editor-bar button {
+  border: 1px solid #c9a45c; background: #fbf6eb; border-radius: 8px; padding: 4px 8px; cursor: pointer;
+}
+.wysiwyg {
+  min-height: 160px; border: 1px solid #d9c9a6; border-radius: 8px; padding: 10px; background: #fff;
+}
+#cropCanvas { width: 100%; max-width: 640px; background: #111; border-radius: 8px; display: block; margin: 10px 0; }
+.crop-tools { display: flex; gap: 8px; flex-wrap: wrap; }
 .stats article { background: #fff; padding: 18px; border-radius: 14px; text-align: center; }
 .stats b { display: block; font-size: 28px; color: #722c2c; }
 .help, .hint { color: #5a4336; }

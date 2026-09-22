@@ -10,7 +10,7 @@
   <section class="section">
     <div class="wrap prose">
       <h1>این صفحه پیدا نشد</h1>
-      <p class="muted">نشانی واردشده در مجموعه مسعودیه وجود ندارد.</p>
+      <p class="muted"><%= typeof extra !== "undefined" && extra ? extra : "نشانی واردشده در مجموعه مسعودیه وجود ندارد." %></p>
       <p><a class="btn btn-gold" href="/">بازگشت به خانه</a></p>
     </div>
   </section>

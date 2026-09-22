@@ -1,0 +1,40 @@
+<%- include("_head", { title: item ? "ویرایش خبر" : "خبر جدید", actions: "" }) %>
+<form class="panel" method="post" action="<%= item ? '/admin/news/' + item.id : '/admin/news/new' %>">
+  <div class="grid2">
+    <label>عنوان <input name="title" required value="<%= item ? item.title : "" %>" /></label>
+    <label>نامک انگلیسی <input name="slug" dir="ltr" value="<%= item ? item.slug : "" %>" /></label>
+    <label>تاریخ نمایش <input name="date" value="<%= item ? item.date : "" %>" /></label>
+    <label>دسته
+      <select name="category">
+        <% ["رویداد","بازدید","مرمت","نمایشگاه","آموزش"].forEach(function (c) { %>
+          <option <%= item && item.category === c ? "selected" : "" %>><%= c %></option>
+        <% }) %>
+      </select>
+    </label>
+  </div>
+  <label>خلاصه <textarea name="excerpt" rows="3"><%= item ? item.excerpt : "" %></textarea></label>
+  <label>متن کامل <textarea name="body" rows="8"><%= item ? item.body : "" %></textarea></label>
+  <div class="hero-pick">
+    <span>عکس خبر</span>
+    <input type="hidden" name="media_id" id="heroMediaId" value="<%= item && item.media_id ? item.media_id : "" %>" />
+    <div class="pick-preview" data-pick="heroMediaId">
+      <% if (item && item.media) { %>
+        <img src="<%= mediaUrl(item.media) %>" alt="" />
+      <% } else { %>
+        <em>عکسی انتخاب نشده</em>
+      <% } %>
+    </div>
+    <button type="button" class="btn ghost" data-open-picker="heroMediaId">انتخاب عکس</button>
+  </div>
+  <label class="checks"><input type="checkbox" name="published" <%= !item || item.published ? "checked" : "" %> /> منتشر شود</label>
+  <div class="form-actions">
+    <button class="btn" type="submit">ذخیره خبر</button>
+    <% if (item) { %>
+      <button class="btn danger" type="submit" form="delNews">حذف</button>
+    <% } %>
+  </div>
+</form>
+<% if (item) { %>
+  <form id="delNews" method="post" action="/admin/news/<%= item.id %>/delete" onsubmit="return confirm('این خبر حذف شود؟');"></form>
+<% } %>
+<%- include("_foot") %>

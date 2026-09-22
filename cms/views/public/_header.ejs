@@ -1,0 +1,29 @@
+  <div class="topbar">
+    <div class="wrap">
+      <span><%= settings.topbar_right %></span>
+      <span><%= settings.topbar_left %></span>
+    </div>
+  </div>
+  <header class="header" id="mainHeader">
+    <div class="wrap header-inner">
+      <a class="brand" href="/">
+        <div class="brand-mark"><%= settings.brand_letter || "م" %></div>
+        <div>
+          <strong><%= settings.site_name %></strong>
+          <span><%= settings.site_tagline %></span>
+        </div>
+      </a>
+      <button class="menu-btn" type="button" id="menuBtn" aria-expanded="false">منو</button>
+      <nav class="nav" id="mainNav">
+        <% nav.forEach(function (item) { %>
+          <a class="<%= page.slug === item.slug ? 'active' : '' %>" href="<%= item.slug === 'home' ? '/' : '/p/' + item.slug %>">
+            <span class="n1"><%= item.nav_label || item.title %></span>
+            <% if (item.nav_sublabel) { %><span class="n2"><%= item.nav_sublabel %></span><% } %>
+          </a>
+        <% }) %>
+      </nav>
+    </div>
+  </header>
+  <% if (typeof preview !== 'undefined' && preview) { %>
+    <div class="preview-banner">پیش‌نمایش — این نسخه هنوز ذخیره یا منتشر نشده است.</div>
+  <% } %>

@@ -1,4 +1,6 @@
 <%- include("_head", { title: "تنظیمات سایت", actions: "" }) %>
+<% if (typeof saved !== "undefined" && saved) { %><div class="toast">تنظیمات ذخیره شد.</div><% } %>
+<% if (typeof error !== "undefined" && error) { %><div class="alert"><%= error %></div><% } %>
 <form class="panel" method="post" action="/admin/settings">
   <h2>هویت مجموعه</h2>
   <div class="grid2">
@@ -12,6 +14,13 @@
     <label>سمت راست <input name="topbar_right" value="<%= s.topbar_right || "" %>" /></label>
     <label>سمت چپ <input name="topbar_left" value="<%= s.topbar_left || "" %>" /></label>
   </div>
+  <h2>ساعات بازدید</h2>
+  <div class="grid2">
+    <label>ساعت <input name="visit_hours" value="<%= s.visit_hours || "" %>" /></label>
+    <label>روزها <input name="visit_days" value="<%= s.visit_days || "" %>" /></label>
+    <label>بلیت <input name="ticket_info" value="<%= s.ticket_info || "" %>" /></label>
+    <label>مترو / مسیر <input name="metro_info" value="<%= s.metro_info || "" %>" /></label>
+  </div>
   <h2>تماس و پاورقی</h2>
   <label>درباره در پاورقی <textarea name="footer_about" rows="3"><%= s.footer_about || "" %></textarea></label>
   <label>کپی‌رایت <input name="footer_copy" value="<%= s.footer_copy || "" %>" /></label>
@@ -24,7 +33,7 @@
   <h2>ورود پنل</h2>
   <div class="grid2">
     <label>نام کاربری <input name="admin_user" value="<%= s.admin_user || "admin" %>" /></label>
-    <label>رمز جدید (خالی = بدون تغییر) <input name="new_password" type="password" /></label>
+    <label>رمز جدید (حداقل ۸ کاراکتر، حرف و عدد) <input name="new_password" type="password" /></label>
   </div>
   <button class="btn" type="submit">ذخیره تنظیمات</button>
 </form>

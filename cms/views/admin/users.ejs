@@ -1,0 +1,33 @@
+<%- include("_head", { title: "کاربران پنل", actions: "" }) %>
+<% if (error) { %><div class="alert"><%= error %></div><% } %>
+<form class="panel" method="post" action="/admin/users">
+  <h2>کاربر جدید</h2>
+  <div class="grid3">
+    <label>نام کاربری <input name="username" required /></label>
+    <label>رمز (حداقل ۸ کاراکتر) <input name="password" type="password" required /></label>
+    <label>نقش
+      <select name="role">
+        <option value="editor">ویرایشگر</option>
+        <option value="admin">مدیر</option>
+      </select>
+    </label>
+  </div>
+  <button class="btn" type="submit">افزودن</button>
+</form>
+<table class="table">
+  <thead><tr><th>نام کاربری</th><th>نقش</th><th></th></tr></thead>
+  <tbody>
+    <% items.forEach(function (u) { %>
+      <tr>
+        <td><%= u.username %></td>
+        <td><%= u.role === "admin" ? "مدیر" : "ویرایشگر" %></td>
+        <td>
+          <form method="post" action="/admin/users/<%= u.id %>/delete" onsubmit="return confirm('حذف این کاربر؟');">
+            <button class="btn danger" type="submit">حذف</button>
+          </form>
+        </td>
+      </tr>
+    <% }) %>
+  </tbody>
+</table>
+<%- include("_foot") %>

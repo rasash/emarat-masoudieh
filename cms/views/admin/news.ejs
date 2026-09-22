@@ -1,0 +1,27 @@
+<%- include("_head", { title: "اخبار و رویدادها", actions: '<a class="btn" href="/admin/news/new">خبر جدید</a>' }) %>
+<table class="table">
+  <thead>
+    <tr>
+      <th>عنوان</th>
+      <th>تاریخ</th>
+      <th>دسته</th>
+      <th>وضعیت</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% items.forEach(function (item) { %>
+      <tr>
+        <td><strong><%= item.title %></strong></td>
+        <td><%= item.date %></td>
+        <td><%= item.category %></td>
+        <td><%= item.published ? "منتشر" : "پیش‌نویس" %></td>
+        <td class="row-actions">
+          <a href="/admin/news/<%= item.id %>">ویرایش</a>
+          <% if (item.published) { %><a href="/news/<%= item.slug %>" target="_blank">نمایش</a><% } %>
+        </td>
+      </tr>
+    <% }) %>
+  </tbody>
+</table>
+<%- include("_foot") %>

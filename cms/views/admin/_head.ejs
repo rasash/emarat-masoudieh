@@ -16,9 +16,14 @@
     <nav>
       <a href="/admin" class="<%= currentPath === '/admin' ? 'on' : '' %>">داشبورد</a>
       <a href="/admin/pages" class="<%= currentPath.startsWith('/admin/pages') ? 'on' : '' %>">صفحات</a>
+      <a href="/admin/news" class="<%= currentPath.startsWith('/admin/news') ? 'on' : '' %>">اخبار</a>
+      <a href="/admin/spaces" class="<%= currentPath.startsWith('/admin/spaces') ? 'on' : '' %>">نقشه فضاها</a>
       <a href="/admin/media" class="<%= currentPath.startsWith('/admin/media') ? 'on' : '' %>">کتابخانه رسانه</a>
       <a href="/admin/messages" class="<%= currentPath.startsWith('/admin/messages') ? 'on' : '' %>">پیام‌ها</a>
+      <% if (!user || user.role === 'admin') { %>
+      <a href="/admin/users" class="<%= currentPath.startsWith('/admin/users') ? 'on' : '' %>">کاربران</a>
       <a href="/admin/settings" class="<%= currentPath.startsWith('/admin/settings') ? 'on' : '' %>">تنظیمات سایت</a>
+      <% } %>
       <a href="/" target="_blank">مشاهده سایت</a>
     </nav>
     <form method="post" action="/admin/logout"><button type="submit">خروج</button></form>

@@ -12,6 +12,22 @@
       <div class="picker-grid" id="pickerGrid"></div>
     </div>
   </div>
+  <div class="picker" id="cropModal" hidden>
+    <div class="picker-box">
+      <header>
+        <strong>برش عکس</strong>
+        <button type="button" class="btn ghost" id="cropClose">بستن</button>
+      </header>
+      <p class="hint">نسبت را انتخاب کنید، بعد برش را به‌صورت عکس جدید آپلود کنید.</p>
+      <div class="crop-tools">
+        <button type="button" data-aspect="1.777">۱۶:۹ سربرگ</button>
+        <button type="button" data-aspect="1">مربع</button>
+        <button type="button" data-aspect="1.333">۴:۳</button>
+      </div>
+      <canvas id="cropCanvas" width="640" height="360"></canvas>
+      <button type="button" class="btn" id="cropSave">ذخیره برش</button>
+    </div>
+  </div>
   <script src="/js/admin.js"></script>
 </body>
 </html>

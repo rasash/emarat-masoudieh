@@ -1,16 +1,21 @@
 <%- include("_head", { title: "داشبورد", actions: '<a class="btn" href="/admin/pages/new">صفحه جدید</a>' }) %>
+<% if (weakPassword) { %>
+  <div class="alert">رمز پیش‌فرض هنوز فعال است. از تنظیمات حتماً رمز قوی بگذارید.</div>
+<% } %>
 <div class="stats">
   <article><b><%= pages %></b><span>صفحه</span></article>
   <article><b><%= media %></b><span>فایل رسانه</span></article>
+  <article><b><%= news %></b><span>خبر</span></article>
   <article><b><%= unread %></b><span>پیام خوانده‌نشده</span></article>
 </div>
 <div class="help">
   <h2>از کجا شروع کنم؟</h2>
   <ol>
-    <li>از <a href="/admin/pages">صفحات</a> متن، عکس سربرگ و بلوک‌های هر صفحه را عوض کنید.</li>
-    <li>از <a href="/admin/media">کتابخانه رسانه</a> عکس جدید آپلود کنید و بعد در صفحات انتخاب کنید.</li>
-    <li>صفحه جدید بسازید و اگر لازم است آن را در سربرگ نمایش دهید.</li>
-    <li>نام سایت، نشانی و تماس را در <a href="/admin/settings">تنظیمات</a> تغییر دهید.</li>
+    <li>از <a href="/admin/pages">صفحات</a> متن، عکس سربرگ و بلوک‌های هر صفحه را عوض کنید. قبل از ذخیره «پیش‌نمایش» را بزنید.</li>
+    <li>اخبار را جدا از صفحات در <a href="/admin/news">اخبار</a> بنویسید و منتشر کنید.</li>
+    <li>نقاط نقشه حیاط را در <a href="/admin/spaces">نقشه فضاها</a> جابه‌جا کنید.</li>
+    <li>از <a href="/admin/media">کتابخانه رسانه</a> عکس آپلود کنید؛ هنگام آپلود نسخه WebP ساخته می‌شود.</li>
+    <li>نام سایت، ساعات بازدید و تماس را در <a href="/admin/settings">تنظیمات</a> تغییر دهید.</li>
   </ol>
 </div>
 <%- include("_foot") %>

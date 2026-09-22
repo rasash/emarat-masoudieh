@@ -1,7 +1,6 @@
 <%- include("_head", { title: page ? "ویرایش صفحه" : "صفحه جدید", actions: page ? '<a class="btn ghost" href="' + (page.is_home ? "/" : "/p/" + page.slug) + '" target="_blank">مشاهده</a>' : "" }) %>
 <form class="page-form" method="post" id="pageForm" action="<%= page ? '/admin/pages/' + page.id : '/admin/pages/new' %>">
-  <% if (typeof currentPath !== 'undefined' && currentPath.includes("saved")) { %>
-  <% } %>
+  <% if (typeof saved !== "undefined" && saved) { %><div class="toast">صفحه ذخیره شد.</div><% } %>
   <section class="panel">
     <h2>مشخصات صفحه</h2>
     <div class="grid2">
@@ -19,11 +18,16 @@
           <option value="page" <%= !page || page.template === "page" ? "selected" : "" %>>صفحه معمولی</option>
           <option value="home" <%= page && page.template === "home" ? "selected" : "" %>>خانه</option>
           <option value="contact" <%= page && page.template === "contact" ? "selected" : "" %>>ارتباط با ما (فرم تماس)</option>
+          <option value="news" <%= page && page.template === "news" ? "selected" : "" %>>اتاق اخبار</option>
+          <option value="visit" <%= page && page.template === "visit" ? "selected" : "" %>>بازدید (ساعت و نقشه)</option>
         </select>
       </label>
     </div>
     <label>خلاصه / متن روی عکس بزرگ
       <textarea name="excerpt" rows="3"><%= page ? page.excerpt : "" %></textarea>
+    </label>
+    <label>توضیح سئو و اشتراک‌گذاری
+      <textarea name="seo_description" rows="2"><%= page ? (page.seo_description || "") : "" %></textarea>
     </label>
     <div class="hero-pick">
       <span>عکس سربرگ صفحه</span>
@@ -74,10 +78,21 @@
   <input type="hidden" name="blocks_json" id="blocksJson" />
   <div class="form-actions">
     <button class="btn" type="submit">ذخیره صفحه</button>
+    <button class="btn ghost" type="button" id="previewBtn">پیش‌نمایش</button>
     <% if (page && !page.is_home) { %>
       <button class="btn danger" type="submit" form="deleteForm">حذف صفحه</button>
     <% } %>
   </div>
+</form>
+<form id="previewForm" method="post" action="/admin/preview" target="_blank">
+  <input type="hidden" name="title" />
+  <input type="hidden" name="slug" />
+  <input type="hidden" name="subtitle" />
+  <input type="hidden" name="excerpt" />
+  <input type="hidden" name="seo_description" />
+  <input type="hidden" name="template" />
+  <input type="hidden" name="hero_media_id" />
+  <input type="hidden" name="blocks_json" />
 </form>
 <% if (page && !page.is_home) { %>
   <form id="deleteForm" method="post" action="/admin/pages/<%= page.id %>/delete" onsubmit="return confirm('این صفحه حذف شود؟');"></form>

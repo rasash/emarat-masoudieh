@@ -1,0 +1,31 @@
+  <footer class="footer">
+    <div class="wrap footer-grid">
+      <div>
+        <h3><%= settings.site_name %></h3>
+        <p><%= settings.footer_about %></p>
+      </div>
+      <div>
+        <h3>صفحات</h3>
+        <% nav.forEach(function (item) { %>
+          <a href="<%= item.slug === 'home' ? '/' : '/p/' + item.slug %>"><%= item.nav_label || item.title %></a>
+        <% }) %>
+      </div>
+      <div>
+        <h3>بازدید</h3>
+        <p class="muted"><%= settings.visit_days || "" %>، <%= settings.visit_hours || "" %></p>
+        <a href="/p/visit">ساعت، مسیر و نقشه فضاها</a>
+        <a href="/p/contact"><%= settings.address %></a>
+        <a href="/p/contact"><%= settings.phone %></a>
+        <a href="mailto:<%= settings.email %>"><%= settings.email %></a>
+      </div>
+    </div>
+    <div class="wrap copy">
+      <span><%= settings.footer_copy %></span>
+    </div>
+  </footer>
+  <div class="lightbox" id="lightbox" hidden>
+    <img alt="" />
+    <p class="lb-cap" id="lightboxCap"></p>
+    <button type="button">بستن</button>
+  </div>
+  <script src="/js/site.js"></script>

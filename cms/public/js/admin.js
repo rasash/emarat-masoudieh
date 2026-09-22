@@ -11,13 +11,15 @@ const empty = {
   split: { kicker: "", title: "", body: "", media_id: "", facts: [{ value: "", label: "" }] },
   rich: { html: "" },
   cards: { kicker: "", title: "", intro: "", items: [{ title: "", body: "", link: "", link_label: "", media_id: "" }] },
-  gallery: { kicker: "", title: "", items: [{ caption: "", media_id: "" }] },
+  gallery: { kicker: "", title: "", items: [{ caption: "", media_id: "", category: "" }] },
   timeline: { kicker: "", title: "", items: [{ date: "", title: "", body: "" }] },
   news: { kicker: "", title: "", intro: "", items: [{ date: "", title: "", body: "", media_id: "" }] }
 };
 
 let pickerTarget = null;
 let mediaCache = [];
+let cropImg = null;
+let cropAspect = 16 / 9;
 
 function field(label, name, value, tag) {
   const v = value == null ? "" : String(value).replace(/</g, "&lt;");
@@ -32,13 +34,29 @@ function mediaPick(id, mediaId) {
     <div class="hero-pick">
       <input type="hidden" data-k="media_id" value="${mediaId || ""}" />
       <div class="pick-preview" data-pick="${id}"><em>انتخاب عکس</em></div>
-      <button type="button" class="btn ghost" data-open-picker="${id}">انتخاب عکس</button>
+      <button type="button" class="btn ghost" data-open-picker="${id}">انتخاب / جایگزینی عکس</button>
+    </div>`;
+}
+
+function richEditor(html) {
+  const v = html == null ? "" : String(html);
+  return `
+    <div class="editor">
+      <div class="editor-bar">
+        <button type="button" data-cmd="bold">پررنگ</button>
+        <button type="button" data-cmd="italic">کج</button>
+        <button type="button" data-cmd="insertUnorderedList">فهرست</button>
+        <button type="button" data-cmd="formatBlock" data-val="h3">عنوان</button>
+        <button type="button" data-cmd="formatBlock" data-val="p">پاراگراف</button>
+      </div>
+      <div class="wysiwyg" contenteditable="true">${v}</div>
+      <textarea data-k="html" hidden>${v.replace(/</g, "&lt;")}</textarea>
     </div>`;
 }
 
 function itemFields(type, item, i) {
   if (type === "gallery") {
-    return `${mediaPick("g-" + i, item.media_id)}${field("شرح", "caption", item.caption)}`;
+    return `${mediaPick("g-" + i, item.media_id)}${field("شرح", "caption", item.caption)}${field("دسته", "category", item.category)}`;
   }
   if (type === "timeline") {
     return `${field("تاریخ", "date", item.date)}${field("عنوان", "title", item.title)}${field("متن", "body", item.body, "textarea")}`;
@@ -59,11 +77,11 @@ function renderBlock(block, index) {
       ${field("متن", "body", d.body, "textarea")}
       ${mediaPick("split-" + index, d.media_id)}
       <div class="items" data-list="facts">
-        ${(d.facts || []).map((f, i) => `<div class="item-row">${field("عدد/مقدار", "value", f.value)}${field("برچسب", "label", f.label)}<button type="button" data-del-item>حذف آمار</button></div>`).join("")}
+        ${(d.facts || []).map((f) => `<div class="item-row">${field("عدد/مقدار", "value", f.value)}${field("برچسب", "label", f.label)}<button type="button" data-del-item>حذف آمار</button></div>`).join("")}
         <button type="button" class="btn ghost" data-add-item='{"value":"","label":""}'>افزودن آمار</button>
       </div>`;
   } else if (block.type === "rich") {
-    extra = field("متن HTML یا ساده", "html", d.html || d.body, "textarea");
+    extra = richEditor(d.html || d.body || "");
   } else {
     extra = `
       ${field("ابرو", "kicker", d.kicker)}
@@ -90,10 +108,19 @@ function renderBlock(block, index) {
   return el;
 }
 
+function syncEditors(root) {
+  (root || document).querySelectorAll(".editor").forEach((ed) => {
+    const wys = ed.querySelector(".wysiwyg");
+    const ta = ed.querySelector("textarea[data-k='html']");
+    if (wys && ta) ta.value = wys.innerHTML;
+  });
+}
+
 function collectValue(node) {
+  syncEditors(node);
   const type = node.dataset.type;
   const data = {};
-  node.querySelectorAll(":scope > label [data-k], :scope > .hero-pick [data-k]").forEach((input) => {
+  node.querySelectorAll(":scope > label [data-k], :scope > .hero-pick [data-k], :scope > .editor [data-k]").forEach((input) => {
     data[input.dataset.k] = input.value;
   });
   const list = node.querySelector("[data-list]");
@@ -110,9 +137,12 @@ function collectValue(node) {
 
 function serialize() {
   const list = document.getElementById("blockList");
-  if (!list) return;
+  if (!list) return "[]";
   const json = [...list.children].map(collectValue);
-  document.getElementById("blocksJson").value = JSON.stringify(json);
+  const payload = JSON.stringify(json);
+  const hidden = document.getElementById("blocksJson");
+  if (hidden) hidden.value = payload;
+  return payload;
 }
 
 async function loadMedia() {
@@ -128,14 +158,8 @@ function paintPicker() {
   grid.innerHTML = mediaCache.map((m) => `<button type="button" data-choose="${m.id}" data-url="${m.url}"><img src="${m.url}" alt=""></button>`).join("");
 }
 
-function setPreview(input, url) {
-  const box = document.querySelector(`.pick-preview[data-pick="${input.id}"]`) || input.parentElement.querySelector(".pick-preview");
-  if (!box) return;
-  box.innerHTML = url ? `<img src="${url}" alt="">` : "<em>عکسی انتخاب نشده</em>";
-}
-
 function refreshPreviews() {
-  document.querySelectorAll("[data-k='media_id'], #heroMediaId").forEach((input) => {
+  document.querySelectorAll("[data-k='media_id'], #heroMediaId, [name='media_id']").forEach((input) => {
     const found = mediaCache.find((m) => String(m.id) === String(input.value));
     const box = input.id === "heroMediaId"
       ? document.querySelector('.pick-preview[data-pick="heroMediaId"]')
@@ -150,6 +174,26 @@ function openPicker(input) {
   loadMedia();
 }
 
+function drawCrop() {
+  const canvas = document.getElementById("cropCanvas");
+  if (!canvas || !cropImg) return;
+  const ctx = canvas.getContext("2d");
+  const iw = cropImg.naturalWidth;
+  const ih = cropImg.naturalHeight;
+  const srcAspect = iw / ih;
+  let sx = 0, sy = 0, sw = iw, sh = ih;
+  if (srcAspect > cropAspect) {
+    sw = ih * cropAspect;
+    sx = (iw - sw) / 2;
+  } else {
+    sh = iw / cropAspect;
+    sy = (ih - sh) / 2;
+  }
+  canvas.width = Math.min(1200, Math.round(sw));
+  canvas.height = Math.round(canvas.width / cropAspect);
+  ctx.drawImage(cropImg, sx, sy, sw, sh, 0, 0, canvas.width, canvas.height);
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   const list = document.getElementById("blockList");
   if (list) {
@@ -161,6 +205,13 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     });
     list.addEventListener("click", (e) => {
+      const cmd = e.target.closest("[data-cmd]");
+      if (cmd) {
+        const val = cmd.dataset.val;
+        document.execCommand(cmd.dataset.cmd, false, val || null);
+        e.preventDefault();
+        return;
+      }
       const block = e.target.closest(".block");
       if (e.target.dataset.remove && block) block.remove();
       if (e.target.dataset.up && block && block.previousElementSibling) block.parentNode.insertBefore(block, block.previousElementSibling);
@@ -180,11 +231,29 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("pageForm").addEventListener("submit", serialize);
   }
 
+  const previewBtn = document.getElementById("previewBtn");
+  if (previewBtn) {
+    previewBtn.addEventListener("click", () => {
+      const blocks = serialize();
+      const form = document.getElementById("previewForm");
+      const src = document.getElementById("pageForm");
+      form.querySelector("[name=title]").value = src.title.value;
+      form.querySelector("[name=slug]").value = src.slug.value;
+      form.querySelector("[name=subtitle]").value = src.subtitle.value;
+      form.querySelector("[name=excerpt]").value = src.excerpt.value;
+      form.querySelector("[name=seo_description]").value = src.seo_description.value;
+      form.querySelector("[name=template]").value = src.template.value;
+      form.querySelector("[name=hero_media_id]").value = src.hero_media_id.value;
+      form.querySelector("[name=blocks_json]").value = blocks;
+      form.submit();
+    });
+  }
+
   document.body.addEventListener("click", (e) => {
     const open = e.target.closest("[data-open-picker]");
     if (open) {
       const key = open.dataset.openPicker;
-      const input = document.getElementById(key) || open.parentElement.querySelector("[data-k='media_id']");
+      const input = document.getElementById(key) || open.parentElement.querySelector("[data-k='media_id'], [name='media_id']");
       if (input) {
         if (!input.id) input.id = "m" + Date.now();
         openPicker(input);
@@ -197,10 +266,39 @@ document.addEventListener("DOMContentLoaded", () => {
       if (box) box.innerHTML = `<img src="${choose.dataset.url}" alt="">`;
       document.getElementById("mediaPicker").hidden = true;
     }
+    const cropOpen = e.target.closest("[data-crop-open]");
+    if (cropOpen) {
+      cropImg = new Image();
+      cropImg.crossOrigin = "anonymous";
+      cropImg.onload = drawCrop;
+      cropImg.src = cropOpen.dataset.cropOpen;
+      document.getElementById("cropModal").hidden = false;
+    }
   });
 
   const close = document.getElementById("pickerClose");
   if (close) close.addEventListener("click", () => { document.getElementById("mediaPicker").hidden = true; });
+  const cropClose = document.getElementById("cropClose");
+  if (cropClose) cropClose.addEventListener("click", () => { document.getElementById("cropModal").hidden = true; });
+  document.querySelectorAll("[data-aspect]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      cropAspect = Number(btn.dataset.aspect);
+      drawCrop();
+    });
+  });
+  const cropSave = document.getElementById("cropSave");
+  if (cropSave) {
+    cropSave.addEventListener("click", async () => {
+      const canvas = document.getElementById("cropCanvas");
+      canvas.toBlob(async (blob) => {
+        const fd = new FormData();
+        fd.append("file", blob, "crop.jpg");
+        await fetch("/admin/api/upload", { method: "POST", body: fd });
+        document.getElementById("cropModal").hidden = true;
+        window.location.reload();
+      }, "image/jpeg", 0.86);
+    });
+  }
 
   const up = document.getElementById("pickerUpload");
   if (up) {
