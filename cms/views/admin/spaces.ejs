@@ -1,11 +1,13 @@
 <%- include("_head", { title: "نقشه فضاها", actions: "" }) %>
-<p class="hint">نقطه‌ها روی عکس حیاط با درصد افقی (X) و عمودی (Y) جابه‌جا می‌شوند. مثلاً ۵۰ و ۵۰ وسط تصویر است.</p>
+<p class="hint">نقطه‌ها روی عکس کامل حیاط‌اند. چپ = ۰ و راست = ۱۰۰؛ بالا = ۰ و پایین = ۱۰۰. سفره‌خانه روی جناح ستون‌دار راست است، نه وسط سنگفرش.</p>
 <% items.forEach(function (item) { %>
   <form class="panel" method="post" action="/admin/spaces/<%= item.id %>">
     <h2><%= item.title %></h2>
     <div class="grid2">
       <label>عنوان <input name="title" value="<%= item.title %>" /></label>
-      <label>متن <textarea name="body" rows="3"><%= item.body %></textarea></label>
+      <label>دوره <input name="era" value="<%= item.era || "" %>" /></label>
+      <label>کاربری <input name="role" value="<%= item.role || "" %>" /></label>
+      <label>متن <textarea name="body" rows="4"><%= item.body %></textarea></label>
       <label>X درصد <input name="x" type="number" min="0" max="100" step="0.5" value="<%= item.x %>" /></label>
       <label>Y درصد <input name="y" type="number" min="0" max="100" step="0.5" value="<%= item.y %>" /></label>
     </div>

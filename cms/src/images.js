@@ -1,3 +1,4 @@
+const fs = require("fs");
 const path = require("path");
 const { UPLOAD_DIR } = require("./db");
 
@@ -85,10 +86,31 @@ function picture(media, opts) {
   </picture>`;
 }
 
+async function cropCourtyardRegion(filename, box) {
+  const src = path.join(UPLOAD_DIR, "courtyard.jpg");
+  if (!sharp || !fs.existsSync(src)) return null;
+  const dest = path.join(UPLOAD_DIR, filename);
+  const meta = await sharp(src).rotate().metadata();
+  const W = meta.width;
+  const H = meta.height;
+  if (!W || !H) return null;
+  const width = Math.max(32, Math.min(W, Math.round(W * box.w)));
+  const height = Math.max(32, Math.min(H, Math.round(H * box.h)));
+  const left = Math.max(0, Math.min(Math.round(W * box.x), W - width));
+  const top = Math.max(0, Math.min(Math.round(H * box.y), H - height));
+  await sharp(src)
+    .rotate()
+    .extract({ left, top, width, height })
+    .jpeg({ quality: 88, mozjpeg: true })
+    .toFile(dest);
+  return filename;
+}
+
 module.exports = {
   processImageFile,
   parseVariants,
   picture,
   mediaSrc,
+  cropCourtyardRegion,
   UPLOAD_DIR
 };

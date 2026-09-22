@@ -191,6 +191,7 @@ app.use((req, res, next) => {
   res.locals.currentPath = req.path;
   res.locals.ogUrl = absoluteUrl(req, req.originalUrl.split("?")[0]);
   res.locals.siteOrigin = absoluteUrl(req, "");
+  res.locals.assetV = "20260922c";
   next();
 });
 
@@ -605,9 +606,11 @@ app.get("/admin/spaces", requireAdmin, (_req, res) => {
 });
 
 app.post("/admin/spaces/:id", requireAdmin, (req, res) => {
-  db.prepare("UPDATE spaces SET title=?, body=?, media_id=?, x=?, y=? WHERE id=?").run(
+  db.prepare("UPDATE spaces SET title=?, body=?, era=?, role=?, media_id=?, x=?, y=? WHERE id=?").run(
     req.body.title || "",
     req.body.body || "",
+    req.body.era || "",
+    req.body.role || "",
     req.body.media_id ? Number(req.body.media_id) : null,
     Number(req.body.x || 50),
     Number(req.body.y || 50),

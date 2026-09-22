@@ -66,33 +66,55 @@
   <% if ((page.is_home || page.template === "visit" || page.slug === "about-mansion") && spaces && spaces.length) { %>
     <section class="section <%= page.is_home ? '' : 'alt' %>">
       <div class="wrap">
-        <div class="section-head">
-          <div class="kicker">نقشه فضاها</div>
-          <h2>روی حیاط بزنید تا عمارت باز شود</h2>
-          <p class="muted">دیوان‌خانه، سفره‌خانه، حوض‌خانه و عمارت مشیری روی همین نقشه مشخص شده‌اند.</p>
+        <div class="section-head court-head">
+          <div class="kicker">نقشهٔ حیاط دیوان‌خانه</div>
+          <h2>روی عمارت بزنید تا روایت باز شود</h2>
+          <p class="muted">هر شماره روی خود بناست: دیوان‌خانه روبه‌روی حوض، سفره‌خانه در جناح ستون‌دار راست، حوض در میان سنگفرش.</p>
         </div>
-        <div class="space-layout">
-          <div class="space-map" id="spaceMap">
+        <div class="court-stage">
+          <figure class="space-map" id="spaceMap">
             <% if (typeof mapMedia !== "undefined" && mapMedia) { %>
-              <%- picture(mapMedia, { sizes: "(max-width: 800px) 100vw, 720px", className: "map-photo", alt: "نقشه فضاهای عمارت مسعودیه" }) %>
+              <%- picture(mapMedia, { sizes: "(max-width: 1100px) 100vw, 1100px", className: "map-photo", alt: "حیاط دیوان‌خانه عمارت مسعودیه" }) %>
             <% } else if (spaces[0] && spaces[0].media) { %>
-              <%- picture(spaces[0].media, { sizes: "(max-width: 800px) 100vw, 720px", className: "map-photo", alt: "نقشه فضاهای عمارت مسعودیه" }) %>
+              <%- picture(spaces[0].media, { sizes: "(max-width: 1100px) 100vw, 1100px", className: "map-photo", alt: "حیاط دیوان‌خانه عمارت مسعودیه" }) %>
             <% } %>
             <% spaces.forEach(function (sp, i) { %>
-              <button type="button" class="hotspot <%= i === 0 ? 'on' : '' %>" style="left:<%= sp.x %>%; top:<%= sp.y %>%" data-space="<%= i %>" aria-label="<%= sp.title %>">
-                <span><%= i + 1 %></span>
+              <button type="button" class="hotspot" style="left:<%= sp.x %>%; top:<%= sp.y %>%"
+                data-space="<%= i %>"
+                data-title="<%= sp.title %>"
+                data-era="<%= sp.era || '' %>"
+                data-role="<%= sp.role || '' %>"
+                data-body="<%= encodeURIComponent(sp.body || '') %>"
+                data-img="<%= sp.media ? mediaSrc(sp.media) : '' %>"
+                aria-label="<%= sp.title %>">
+                <span class="num"><%= i + 1 %></span>
+                <span class="name"><%= sp.title %></span>
               </button>
             <% }) %>
+            <figcaption class="court-plate">حیاط دیوان‌خانه — مجموعه فرهنگی‌تاریخی عمارت مسعودیه، بهارستان</figcaption>
+          </figure>
+        </div>
+        <div class="space-vitrine" id="spaceVitrine" hidden>
+          <div class="vitrine-frame">
+            <button type="button" class="vitrine-close" id="vitrineClose">بستن</button>
+            <div class="vitrine-photo">
+              <img id="vitrineImg" alt="" hidden />
+              <% spaces.forEach(function (sp, i) { %>
+                <% if (sp.media) { %>
+                  <img class="vitrine-shot" data-shot="<%= i %>" src="<%= mediaSrc(sp.media) %>" alt="<%= sp.title %>" hidden />
+                <% } %>
+              <% }) %>
+            </div>
+            <div class="vitrine-copy">
+              <div class="kicker" id="vitrineKicker">مدخل مجموعه</div>
+              <h3 id="vitrineTitle"></h3>
+              <dl class="vitrine-meta">
+                <div><dt>دوره</dt><dd id="vitrineEra"></dd></div>
+                <div><dt>کاربری</dt><dd id="vitrineRole"></dd></div>
+              </dl>
+              <div class="vitrine-body" id="vitrineBody"></div>
+            </div>
           </div>
-          <aside class="space-panel" id="spacePanel">
-            <% spaces.forEach(function (sp, i) { %>
-              <article class="space-card <%= i === 0 ? 'on' : '' %>" data-space-card="<%= i %>">
-                <% if (sp.media) { %><%- picture(sp.media, { sizes: "360px", alt: sp.title }) %><% } %>
-                <h3><%= sp.title %></h3>
-                <p class="muted"><%= sp.body %></p>
-              </article>
-            <% }) %>
-          </aside>
         </div>
       </div>
     </section>
